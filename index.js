@@ -38,7 +38,7 @@ exports.initPool = function (config) {
   });
 }
 
-exports.getConnection = function () {
+const getConnection = function () {
   return new Promise((resolve, reject) => {
     if (!pool) {
       reject('My sql pool not initialized.');
@@ -52,6 +52,8 @@ exports.getConnection = function () {
     });
   });
 }
+
+exports.getConnection;
 
 exports.execute = function ({ sql, timeout = 40000, values = [] }) {
   return getConnection()
