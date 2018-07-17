@@ -3,7 +3,7 @@ const mysql = require('mysql');
 let pool;
 let poolCon;
 
-exports.initPool = function (config) {
+function initPool(config) {
   if (!config) {
     throw new Error('Connection properties not found');
   }
@@ -38,7 +38,7 @@ exports.initPool = function (config) {
   });
 }
 
-const getConnection = function () {
+function getConnection() {
   return new Promise((resolve, reject) => {
     if (!pool) {
       reject('My sql pool not initialized.');
@@ -53,10 +53,8 @@ const getConnection = function () {
   });
 }
 
-exports.getConnection;
-
-exports.execute = function ({ sql, timeout = 40000, values = [] }) {
-  return getConnection()
+function execute({ sql, timeout = 40000, values = [] }) {
+  return this.getConnection()
     .then(con => new Promise((resolve, reject) => {
       con.query({ sql, timeout, values }, (error, results, fields) => {
         con.release();
@@ -69,6 +67,11 @@ exports.execute = function ({ sql, timeout = 40000, values = [] }) {
     }));
 }
 
-exports.escape = function (str) {
+function escape(str) {
   return mysql.escape(str);
 }
+
+exports.initPool = initPool;
+exports.getConnection = getConnection;
+exports.execute = execute;
+exports.escape = escape;
